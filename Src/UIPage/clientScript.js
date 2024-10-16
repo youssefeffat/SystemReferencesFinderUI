@@ -6,102 +6,48 @@ var objectsTables = {
     "location ": ''
 };
 
-function fillDashboard(sectionId) {
-
-	alert("this search will take some time, on average 10-15 seconds");
-	fillImpactedConfig('configuration');
-	fillImpactedData('data');
-	fillImpactedScriptsByName('scripts-name');
-	alert("Search done!");
-
-    // var objectName = document.getElementById('searchedName').value;
-    // var objectType = document.getElementById('objectType').value;
-    // var objectTable = objectsTables[objectType];
-
-    // alert("this search will take some time, on average 10-15 seconds");
-
-    // var ga = new GlideAjax('global.queryAllObjectReferences');
-    // ga.addParam('sysparm_name', 'getScriptsCallingObjectByName');
-    // ga.addParam('objectName', objectName);
-    // ga.addParam('objectType', objectType);
-    // ga.addParam('objectTable', objectTable);
-
-    // ga.getXMLWait();
-    // alert("Search done!");
-
-    // var htmlElement = document.getElementById(sectionId);
-    // var parsedData = JSON.parse(ga.getAnswer());
-    // htmlElement.innerHTML = parsedData;
-}
-
-
-function fillImpactedData(sectionId) {
-
-    var objectName = document.getElementById('searchedName').value;
-    var objectType = document.getElementById('objectType').value;
-    var objectTable = objectsTables[objectType];	
-
-    // alert("this search will take some time, on average 10-15 seconds");
-
-    var ga = new GlideAjax('global.queryAllObjectReferences');
-    ga.addParam('sysparm_name', 'getObjectReferencedData');
-    ga.addParam('objectName', objectName);
-    ga.addParam('objectType', objectType);
-    ga.addParam('objectTable', objectTable);
-
-    ga.getXMLWait();
-    // alert("Search done!");
-
-    var htmlElement = document.getElementById(sectionId);
-    var parsedData = JSON.parse(ga.getAnswer());
-	// console.log(sectionId, " : ",parsedData);
-    htmlElement.innerHTML = parsedData;
-
-}
-
-function fillImpactedConfig(sectionId) {
+function fillAllSections(section1Id, section2Id, section3Id) {
 
     var objectName = document.getElementById('searchedName').value;
     var objectType = document.getElementById('objectType').value;
     var objectTable = objectsTables[objectType];
 
-    // alert("this search will take some time, on average 10-15 seconds");
+    if (objectName === '') {
+        alert('no object name was provided');
 
-    var ga = new GlideAjax('global.queryAllObjectReferences');
-    ga.addParam('sysparm_name', 'getObjectDependantConfig');
-    ga.addParam('objectName', objectName);
-    ga.addParam('objectType', objectType);
-    ga.addParam('objectTable', objectTable);
+    } else {
+        alert("this search will take some time, on average 10-15 seconds");
 
-    ga.getXMLWait();
-    // alert("Search done!");
+        var ga = new GlideAjax('global.queryAllObjectReferences');
+        ga.addParam('sysparm_name', 'getAllReferences');
+        ga.addParam('objectName', objectName);
+        ga.addParam('objectType', objectType);
+        ga.addParam('objectTable', objectTable);
+        ga.addParam('section1', section1Id);
+        ga.addParam('section2', section2Id);
+        ga.addParam('section3', section3Id);
 
-    var htmlElement = document.getElementById(sectionId);
-    var parsedData = JSON.parse(ga.getAnswer());
-	// console.log(sectionId, " : ",parsedData);
-    htmlElement.innerHTML = parsedData;
-}
+        ga.getXMLWait();
+
+        var parsedData = JSON.parse(ga.getAnswer());
+		console.log(parsedData);
+
+        if (parsedData['error']) {
+            alert(objectType + ' not Found');
+        } else {
+
+            alert('Search finished !');
+
+            var htmlElement1 = document.getElementById(section1Id);
+            var htmlElement2 = document.getElementById(section2Id);
+            var htmlElement3 = document.getElementById(section3Id);
+			
+			htmlElement1.innerHTML = parsedData[section1Id];
+            htmlElement2.innerHTML = parsedData[section2Id];
+            htmlElement3.innerHTML = parsedData[section3Id];
+        }
+
+    }
 
 
-function fillImpactedScriptsByName(sectionId) {
-
-    var objectName = document.getElementById('searchedName').value;
-    var objectType = document.getElementById('objectType').value;
-    var objectTable = objectsTables[objectType];
-
-    // alert("this search will take some time, on average 10-15 seconds");
-
-    var ga = new GlideAjax('global.queryAllObjectReferences');
-    ga.addParam('sysparm_name', 'getScriptsCallingObjectByName');
-    ga.addParam('objectName', objectName);
-    ga.addParam('objectType', objectType);
-    ga.addParam('objectTable', objectTable);
-
-    ga.getXMLWait();
-    // alert("Search done!");
-
-    var htmlElement = document.getElementById(sectionId);
-    var parsedData = JSON.parse(ga.getAnswer());
-	// console.log(sectionId, " : ",parsedData);
-    htmlElement.innerHTML = parsedData;
 }

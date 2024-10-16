@@ -5,7 +5,7 @@ queryAllObjectReferences.prototype = Object.extendsObject(AbstractAjaxProcessor,
         res = ['task', 'cmdb'];
 
         for (var i = 0; i < res.length; i++) {
-
+			//Adding all child tables to the list
             var rec = new GlideRecord('sys_db_object');
             rec.addQuery('super_class.name', res[i]);
             rec.query();
@@ -15,32 +15,41 @@ queryAllObjectReferences.prototype = Object.extendsObject(AbstractAjaxProcessor,
         }
         return res;
     },
-
-    getObjectDependantConfig: function() {
+    getAllReferences: function() {
 
         //Communicated variables
         var objectName = this.getParameter('objectName');
         var objectType = this.getParameter('objectType');
         var objectTable = this.getParameter('objectTable');
+        var section1 = this.getParameter('section1');
+        var section2 = this.getParameter('section2');
+        var section3 = this.getParameter('section3');
+
+		result = {};
+		result[section1] = '';
+		result[section2] = '';
+		result[section3] = '';
+
 
         // get the object sys_id
         var object = new GlideRecord(objectTable);
-        object.addQuery('name', objectName);
+        object.addQuery('name', objectName).addOrCondition('sys_id', objectName);
         object.query();
         if (!object.next()) {
-            return objectType + ' not found';
-            // TODO : raise error
+            // throw Error(objectType + 'not found');
+			result = {
+				error : true,
+			};
+			return new global.JSON().encode(result);
         }
         var objectSysId = object.sys_id.toString();
+        var objectName = object.name.toString();
 
-        // allowedTables = allowedTables();
-        // allowedTables = ['task'];
-        var obj = new global.queryAllObjectReferences;
-        var allowedTables = obj.dataTables();
+        var scriptInclude = new global.queryAllObjectReferences;
+        var allowedTables = scriptInclude.dataTables();
 
-
-        // //initialise the result
-        var result = '<table class=styled-table border=1>' +
+        //initialise the result
+        var resultInit = '<table class=styled-table border=1>' +
             '<tr>' +
             '<th> Table referencing the ' + objectType + '</th>' +
             '<th> Technical name </th>' +
@@ -48,6 +57,19 @@ queryAllObjectReferences.prototype = Object.extendsObject(AbstractAjaxProcessor,
             '<th> Number of records referencing the ' + objectType + ' </th>' +
             '<th> link to records</th>' +
             '</tr>';
+
+        var data1 = scriptInclude.getObjectDependantConfig(objectName, objectSysId, objectTable, allowedTables, resultInit);
+        var data2 = scriptInclude.getObjectReferencedData(objectName, objectSysId, objectTable, allowedTables, resultInit);
+        var data3 = scriptInclude.getObjectReferencedData(objectName, objectSysId, objectTable, allowedTables, resultInit);
+
+		result[section1] = data1;
+		result[section2] = data2;
+		result[section3] = data3;
+
+        return new global.JSON().encode(result);
+    },
+
+    getObjectDependantConfig: function(objectName, objectSysId, objectTable, allowedTables, result) {
 
         // Query dictionary table for reference and condition fields
         var dict = new GlideRecord('sys_dictionary');
@@ -150,39 +172,10 @@ queryAllObjectReferences.prototype = Object.extendsObject(AbstractAjaxProcessor,
 
         result += '</table>';
 
-        return new global.JSON().encode(result);
+        return result;
     },
 
-    getObjectReferencedData: function() {
-
-        //Communicated variables
-        var objectName = this.getParameter('objectName');
-        var objectType = this.getParameter('objectType');
-        var objectTable = this.getParameter('objectTable');
-
-        // get the object sys_id
-        var object = new GlideRecord(objectTable);
-        object.addQuery('name', objectName);
-        object.query();
-        if (!object.next()) {
-            return objectType + ' not found';
-            // TODO : raise error
-        }
-        var objectSysId = object.sys_id.toString();
-
-        // var allowedTables = ['task'];
-        var obj = new global.queryAllObjectReferences;
-        var allowedTables = obj.dataTables();
-
-        // //initialise the result
-        var result = '<table class=styled-table border=1>' +
-            '<tr>' +
-            '<th> Table referencing the ' + objectType + '</th>' +
-            '<th> Technical name </th>' +
-            '<th> Column </th>' +
-            '<th> Number of records referencing the ' + objectType + ' </th>' +
-            '<th> link to records</th>' +
-            '</tr>';
+    getObjectReferencedData: function(objectName, objectSysId, objectTable, allowedTables, result) {
 
         // Query dictionary table for reference and condition fields
         var dict = new GlideRecord('sys_dictionary');
@@ -237,25 +230,10 @@ queryAllObjectReferences.prototype = Object.extendsObject(AbstractAjaxProcessor,
         }
 
         result += '</table>';
-        return new global.JSON().encode(result);
+        return result;
     },
 
-    getScriptsCallingObjectByName: function() {
-
-        //Communicated variables
-        var objectName = this.getParameter('objectName');
-        var objectType = this.getParameter('objectType');
-        var objectTable = this.getParameter('objectTable');
-
-        // //initialise the result
-        var result = '<table class=styled-table border=1>' +
-            '<tr>' +
-            '<th> Table referencing the ' + objectType + '</th>' +
-            '<th> Technical name </th>' +
-            '<th> Column </th>' +
-            '<th> Number of records referencing the ' + objectType + ' </th>' +
-            '<th> link to records</th>' +
-            '</tr>';
+    getScriptsCallingObjectByName: function(objectName, objectSysId, objectTable, allowedTables, result) {
 
         // Query dictionary table for reference and condition fields
         var dict = new GlideRecord('sys_dictionary');
@@ -299,7 +277,7 @@ queryAllObjectReferences.prototype = Object.extendsObject(AbstractAjaxProcessor,
                 }
             }
         }
-        return new global.JSON().encode(result);
+        return result;
     },
 
     type: 'queryAllObjectReferences'
