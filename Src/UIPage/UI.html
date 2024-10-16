@@ -1,0 +1,306 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<j:jelly trim="false" xmlns:j="jelly:core" xmlns:g="glide" xmlns:j2="null" xmlns:g2="null">
+
+<head>
+    <style>
+        /* Global style for the page */
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font: 16px Arial;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* First section: Search bar and button in the top-right */
+        #section1 {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 10px;
+        }
+
+        /* Div 1-1: Search bar form */
+        #div1-1 {
+            width: 50%;
+            text-align: center;
+        }
+        .search-container {
+            width: 70%;
+            margin: 0 auto;
+            padding: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        select {
+            width: 20%;
+            padding: 15px;
+            font-size: 18px;
+            border: 1px solid #ccc;
+            outline: none;
+            background-color: #f0f0f0;
+        }
+        input[type=text] {
+            width: 80%;
+            padding: 15px;
+            font-size: 18px;
+            border: 1px solid #ccc;
+            border-radius: 5px 0 0 5px;
+            outline: none;
+        }
+        input[type=submit] {
+            width: 20%;
+            padding: 15px;
+            font-size: 18px;
+            background-color: DodgerBlue;
+            color: white;
+            border: 1px solid DodgerBlue;
+            border-radius: 0 5px 5px 0;
+            cursor: pointer;
+        }
+        input[type=submit]:hover {
+            background-color: #007acc;
+        }
+        helpText {
+            margin-top: 10px;
+            padding: 0px;
+        }
+
+        /* Div 1-2: Button in the top-right corner */
+        #div1-2 button {
+            position: fixed;
+            top: 2%;
+            right: 0;
+            background-color: rgb(36, 175, 36);
+            border: none;
+            font-size: medium;
+            color: white;
+            padding: 5px;
+            cursor: pointer;
+        }
+
+        /* Second section */
+        #section2 {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 35vh;
+            /* box-shadow: 0 0 10px rgba(1, 39, 4, 0.516); */
+        }
+
+        /* Dashboard container */
+        #dashboard {
+            width: 70%;
+            padding: 10px;
+            text-align: center;
+            height: 300px;
+        }
+
+        /* Dashboard content (table) */
+        #dashboard-content {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+
+        table, th, td {
+            border: 1px solid black;
+            padding: 8px;
+        }
+
+        th {
+            background-color: #009879;
+            color: white;
+        }
+
+        /* Third section with 4 containers */
+        #section3 {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px 10%;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(1, 39, 4, 0.516);
+
+        }
+
+        /* Title for Section 3 */
+        #section3-title {
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        /* Container layout */
+        .container-row {
+            display: flex;
+            justify-content: space-evenly;
+            width: 100%;
+            margin-bottom: 20px;
+        }
+
+        /* Individual container in third section */
+        .container {
+            width: 45%;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-around;
+            align-items: center;
+            height: 400px; /* Set a fixed height for containers */
+            overflow: auto; /* Hide overflow to keep the layout clean */
+        }
+
+        /* Title for each container */
+        .container h3 {
+            position: absolute;
+            top: 10px;
+            left: 20px;
+            font-size: 18px;
+            margin: 0;
+        }
+
+        /* Button in bottom of each container */
+        .container button {
+            position: absolute;
+            right: 10px;
+            top: 10px;
+            background-color: #007acc;
+            color: white;
+            border: none;
+            padding: 5px;
+            cursor: pointer;
+        }
+
+        /* Scrollable content area */
+        .container-content {
+            overflow-y: auto; /* Enable vertical scrolling */
+            width: 100%;
+            height: calc(100% - 100px); /* Adjust height to account for title and button */
+            padding-bottom: 40px; /* Extra space to ensure scrolling doesn't overlap the button */
+        }
+
+
+        /* Table in each container */
+        .container table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 40px;
+        }
+        .container th, .container td {
+            border: 1px solid #ccc;
+            padding: 8px;
+            text-align: left;
+        }
+        .container th {
+            background-color: #009879;
+            color: white;
+        }
+
+    </style>
+</head>
+<body>
+
+    <!-- Section 1: Search bar and top-right button -->
+    <div id="section1">
+        <div id="div1-1">
+            <g:ui_form onsubmit="fillDashboard('dashboard-content'); return false;">
+                <h1>References Finder</h1>
+                <div class="search-container">
+				
+                    <select id="objectType" name="objectType">
+                        <option value="group">Group</option>
+                        <option value="business Service">Business Service</option>
+                        <option value="location">Location</option>
+                        <option value="business segment">Business segment</option>
+                        <option value="LoB/Region">LoB/Region</option>
+                    </select>
+                    <input id="searchedName" type="text" name="myObject" placeholder="Enter Name"></input>
+                    <input type="submit" value="Search"></input>
+                </div>
+                <div id="helpText"><i>Please type the EXACT name!</i></div>
+            </g:ui_form>
+        </div>
+        <div id="div1-2">
+            <button>Documentation</button>
+        </div>
+    </div>
+
+    <!-- Section 2: Dashboard -->
+    <div id="section2">
+        <div id="dashboard">
+            <h2>Quick insights</h2>
+            <div id="dashboard-content">
+                <!-- <table>
+                    <thead>
+                        <tr><th>Header 1</th><th>Header 2</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>Data 1</td><td>Data 2</td></tr>
+                        <tr><td>Data 3</td><td>Data 4</td></tr>
+                    </tbody>
+                </table> -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Section 3: Title and Containers with Tables -->
+    <div id="section3">
+        <h2 id="section3-title">System Analysis</h2>
+
+        <!-- Container row 1 -->
+        <div class="container-row">
+            <div class="container">
+                <h3>Dependant Configuration</h3>
+                <div id="configuration">
+                    <!-- <table>
+                        <thead>
+                            <tr><th>Config 1</th><th>Config 2</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>Data A</td><td>Data B</td></tr>
+                            <tr><td>Data A</td><td>Data B</td></tr>
+                            <tr><td>Data A</td><td>Data B</td></tr>
+                            <tr><td>Data A</td><td>Data B</td></tr>
+                            <tr><td>Data A</td><td>Data B</td></tr>
+                        </tbody>
+                    </table> -->
+                </div>
+                <!-- <button onclick="fillImpactedConfig('configuration'); return false;" >Search</button> -->
+            </div>
+            <div class="container">
+                <h3>Referenced Data</h3>
+                <div id="data"></div>
+                <!-- <button onclick="fillImpactedData('data'); return false;" >Search</button> -->
+            </div>
+        </div>
+
+        <!-- Container row 2 -->
+        <div class="container-row">
+            <!-- <div class="container">
+                <h3>Scripts Using sys_id</h3>
+                <div id="scripts-sysid"></div>
+                <button  onclick="fillImpactedScriptsBySysId('scripts-sysid'); return false;">Search</button>
+            </div> -->
+            <div class="container">
+                <h3>Scripts calling the object by name </h3>
+                <div id="scripts-name"></div>
+                <!-- <button onclick="fillImpactedScriptsByName('scripts-name'); return false;">Search</button> -->
+            </div>
+        </div>
+    </div>
+
+</body>
+
+</j:jelly>
