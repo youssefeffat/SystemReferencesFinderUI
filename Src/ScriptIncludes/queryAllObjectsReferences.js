@@ -5,7 +5,7 @@ queryAllObjectReferences.prototype = Object.extendsObject(AbstractAjaxProcessor,
         res = ['task', 'cmdb'];
 
         for (var i = 0; i < res.length; i++) {
-			//Adding all child tables to the list
+            //Adding all child tables to the list
             var rec = new GlideRecord('sys_db_object');
             rec.addQuery('super_class.name', res[i]);
             rec.query();
@@ -25,11 +25,10 @@ queryAllObjectReferences.prototype = Object.extendsObject(AbstractAjaxProcessor,
         var section2 = this.getParameter('section2');
         var section3 = this.getParameter('section3');
 
-		result = {};
-		result[section1] = '';
-		result[section2] = '';
-		result[section3] = '';
-
+        var result = {};
+        result[section1] = '';
+        result[section2] = '';
+        result[section3] = '';
 
         // get the object sys_id
         var object = new GlideRecord(objectTable);
@@ -37,10 +36,10 @@ queryAllObjectReferences.prototype = Object.extendsObject(AbstractAjaxProcessor,
         object.query();
         if (!object.next()) {
             // throw Error(objectType + 'not found');
-			result = {
-				error : true,
-			};
-			return new global.JSON().encode(result);
+            result = {
+                error: true,
+            };
+            return new global.JSON().encode(result);
         }
         var objectSysId = object.sys_id.toString();
         var objectName = object.name.toString();
@@ -60,17 +59,19 @@ queryAllObjectReferences.prototype = Object.extendsObject(AbstractAjaxProcessor,
 
         var data1 = scriptInclude.getObjectDependantConfig(objectName, objectSysId, objectTable, allowedTables, resultInit);
         var data2 = scriptInclude.getObjectReferencedData(objectName, objectSysId, objectTable, allowedTables, resultInit);
-        var data3 = scriptInclude.getObjectReferencedData(objectName, objectSysId, objectTable, allowedTables, resultInit);
+        var data3 = scriptInclude.getScriptsCallingObjectByName(objectName, objectSysId, objectTable, allowedTables, resultInit);
 
-		result[section1] = data1;
-		result[section2] = data2;
-		result[section3] = data3;
+        result[section1] = data1;
+        result[section2] = data2;
+        result[section3] = data3;
 
         return new global.JSON().encode(result);
+		
+
     },
 
     getObjectDependantConfig: function(objectName, objectSysId, objectTable, allowedTables, result) {
-
+        var foundRecords = false;
         // Query dictionary table for reference and condition fields
         var dict = new GlideRecord('sys_dictionary');
         dict.addQuery('reference', 'CONTAINS', objectTable).addAndCondition('internal_type', 'Reference');
@@ -97,8 +98,6 @@ queryAllObjectReferences.prototype = Object.extendsObject(AbstractAjaxProcessor,
             gr.addQuery("table_name", tblName);
             gr.query();
             if (!gr.hasNext()) {
-                // var tableUtils = new TableUtils(dict.name);
-                // var tableDisplayName = tableUtils.getLabel();
                 var filterOperator = '=';
                 var refType = dict.internal_type;
                 if (refType == 'glide_list' || refType == 'conditions') {
@@ -113,10 +112,11 @@ queryAllObjectReferences.prototype = Object.extendsObject(AbstractAjaxProcessor,
                 }
                 rec.query();
                 if (rec.getRowCount() > 0) {
+                    foundRecords = true;
                     //Display table/column info
                     result += '<tr>' +
                         '<td>' + rec.getLabel() + '</td>' +
-                        '<td>' + dict.name + '</td>' +
+                        '<td> ' + dict.name + '</td>' +
                         '<td>' + dict.column_label + '</td>' +
                         '<td>' + rec.getRowCount() + '</td>' +
                         '<td><a href="' + dict.name + '_list.do?sysparm_query=' + dict.element + filterOperator + objectSysId + '" target="_blank" rel="noopener"><u>link</u></a></td>' +
@@ -158,6 +158,7 @@ queryAllObjectReferences.prototype = Object.extendsObject(AbstractAjaxProcessor,
                 rec2.addEncodedQuery(encodedQuery);
                 rec2.query();
                 if (rec2.getRowCount() > 0) {
+                    foundRecords = true;
                     //Display table/column info
                     result += '<tr>' +
                         '<td>' + rec2.getLabel() + '</td>' +
@@ -170,13 +171,25 @@ queryAllObjectReferences.prototype = Object.extendsObject(AbstractAjaxProcessor,
             }
         }
 
+        if (!foundRecords) {
+            result += '<tr>' +
+                '<td>' + 'No records were found' + '</td>' +
+                '<td>' + 'N/A' + '</td>' +
+                '<td>' + 'N/A' + '</td>' +
+                '<td>' + 'N/A' + '</td>' +
+                '<td>' + 'N/A' + '</td>' +
+                '</tr>';
+        }
+
         result += '</table>';
+
 
         return result;
     },
 
     getObjectReferencedData: function(objectName, objectSysId, objectTable, allowedTables, result) {
 
+        var foundRecords = false;
         // Query dictionary table for reference and condition fields
         var dict = new GlideRecord('sys_dictionary');
         dict.addQuery('reference', 'CONTAINS', objectTable).addAndCondition('internal_type', 'Reference');
@@ -217,6 +230,7 @@ queryAllObjectReferences.prototype = Object.extendsObject(AbstractAjaxProcessor,
                 }
                 rec.query();
                 if (rec.getRowCount() > 0) {
+                    foundRecords = true;
                     //Display table/column info
                     result += '<tr>' +
                         '<td>' + rec.getLabel() + '</td>' +
@@ -229,12 +243,23 @@ queryAllObjectReferences.prototype = Object.extendsObject(AbstractAjaxProcessor,
             }
         }
 
+        if (!foundRecords) {
+            result += '<tr>' +
+                '<td>' + 'No records were found' + '</td>' +
+                '<td>' + 'N/A' + '</td>' +
+                '<td>' + 'N/A' + '</td>' +
+                '<td>' + 'N/A' + '</td>' +
+                '<td>' + 'N/A' + '</td>' +
+                '</tr>';
+        }
+
         result += '</table>';
         return result;
     },
 
     getScriptsCallingObjectByName: function(objectName, objectSysId, objectTable, allowedTables, result) {
 
+        var foundRecords = false;
         // Query dictionary table for reference and condition fields
         var dict = new GlideRecord('sys_dictionary');
         dict.addQuery('internal_type', 'CONTAINS', 'script');
@@ -266,6 +291,7 @@ queryAllObjectReferences.prototype = Object.extendsObject(AbstractAjaxProcessor,
                 rec2.addEncodedQuery(encodedQuery);
                 rec2.query();
                 if (rec2.getRowCount() > 0) {
+                    foundRecords = true;
                     //Display table/column info
                     result += '<tr>' +
                         '<td>' + rec2.getLabel() + '</td>' +
@@ -277,6 +303,17 @@ queryAllObjectReferences.prototype = Object.extendsObject(AbstractAjaxProcessor,
                 }
             }
         }
+        if (!foundRecords) {
+            result += '<tr>' +
+                '<td>' + 'No records were found' + '</td>' +
+                '<td>' + 'N/A' + '</td>' +
+                '<td>' + 'N/A' + '</td>' +
+                '<td>' + 'N/A' + '</td>' +
+                '<td>' + 'N/A' + '</td>' +
+                '</tr>';
+        }
+
+        result += '</table>';
         return result;
     },
 
