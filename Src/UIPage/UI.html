@@ -20,7 +20,6 @@
             align-items: center;
             padding: 10px;
         }
-
         /* Div 1-1: Search bar form */
         #div1-1 {
             width: 50%;
@@ -67,7 +66,6 @@
             margin-top: 10px;
             padding: 0px;
         }
-
         /* Div 1-2: Button in the top-right corner */
         #div1-2 button {
             position: fixed;
@@ -86,14 +84,12 @@
         #section3 {
             display: flex;
             flex-direction: column;
-            justify-content: center;
-            align-items: center;
             padding: 20px 10%;
             background-color: #fff;
             box-shadow: 0 0 10px rgba(1, 39, 4, 0.516);
+            size: 50%;
 
         }
-
         /* Title for Section 3 */
         #section3-title {
             text-align: center;
@@ -101,18 +97,18 @@
             font-size: 24px;
             font-weight: bold;
         }
-
         /* Container layout */
-        .container-row {
+        .section3-body {
             display: flex;
-            justify-content: space-evenly;
+            justify-content: space-around;
+            flex-direction: row;
             width: 100%;
             margin-bottom: 20px;
+            height: 100%;
         }
-
         /* Individual container in third section */
         .container {
-            width: 60%;
+            width: 95%;
             padding: 20px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             position: relative;
@@ -120,10 +116,11 @@
             flex-direction: column;
             justify-content: space-around;
             align-items: center;
-            height: 400px; /* Set a fixed height for containers */
+            height: 800px; /* Set a fixed height for containers */
             overflow: auto; /* Hide overflow to keep the layout clean */
+            margin: 1%;
+            padding-bottom: 0px;
         }
-
         /* Title for each container */
         .container h3 {
             position: absolute;
@@ -132,33 +129,19 @@
             font-size: 18px;
             margin: 0;
         }
-
-        /* Button in bottom of each container */
-        .container button {
-            position: absolute;
-            right: 10px;
-            top: 10px;
-            background-color: #007acc;
-            color: white;
-            border: none;
-            padding: 5px;
-            cursor: pointer;
-        }
-
         /* Scrollable content area */
         .container-content {
-            overflow-y: auto; /* Enable vertical scrolling */
+            overflow-y:auto; /* Enable vertical scrolling */
             width: 100%;
-            height: calc(100% - 100px); /* Adjust height to account for title and button */
-            padding-bottom: 40px; /* Extra space to ensure scrolling doesn't overlap the button */
+            height: calc(100% - 60px); /* Adjust height to account for title and button */
+            padding: 4px; /* Extra space to ensure scrolling doesn't overlap the button */
         }
-
-
         /* Table in each container */
         .container table {
+            font-size: smaller;
             width: 100%;
             border-collapse: collapse;
-            margin-top: 40px;
+            margin-top: 2%;
         }
         .container th, .container td {
             border: 1px solid #ccc;
@@ -169,9 +152,22 @@
             background-color: #009879;
             color: white;
         }
+        .container2 {
+            width: 60%;
+            padding-top: 20px;
+            padding-bottom: 5px;
+            /* box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); */
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            /* justify-content: space-evenly; */
+            align-items: center;
+            height: 600px; 
+            /* overflow: auto; Hide overflow to keep the layout clean */
+        }
 
-		
-		 #loader {
+        
+        #loader {
             border: 12px solid #f3f3f3;
             border-radius: 50%;
             border-top: 12px solid #444444;
@@ -193,19 +189,20 @@
             100% {
                 transform: rotate(360deg);
             }
+
         } 
-	
+
     </style>
 </head>
 <body>
-		<div id="loader" class="center"></div>
+    <div id="loader" class="center"></div>
     <!-- Section 1: Search bar and top-right button -->
     <div id="section1">
         <div id="div1-1">
             <g:ui_form onsubmit="fillAllSections('configuration', 'data', 'scripts-name'); return false;">
                 <h1>References Finder</h1>
                 <div class="search-container">
-				
+                
                     <select id="objectType" name="objectType">
                         <option value="Group">Group</option>
                         <option value="Business Service">Business Service</option>
@@ -224,42 +221,26 @@
         </div>
     </div>
 
-    <!-- Section 2: Dashboard -->
-    <!-- <div id="section2">
-        <div id="dashboard">
-            <h2 id="section3-title"></h2>
-            <div id="dashboard-content">
-
-            </div>
-        </div>
-    </div> -->
-
     <!-- Section 3: Title and Containers with Tables -->
     <div id="section3">
         <h2 id="section3-title">System Analysis</h2>
-
-        <!-- Container row 1 -->
-        <div class="container-row">
-            <div class="container">
-                <h3>Dependant Configuration</h3>
-                <div id="configuration">
+        <div class="section3-body">
+            <div class="container2">
+                <div class="container">
+                    <h3>Dependant Configuration</h3>
+                    <div class="container-content" id="configuration"><table class="styled-table" border="1"><tbody><tr><th> Table referencing the Group</th><th> Technical name </th><th> Column </th><th> Number of records referencing the Group </th><th> link to records</th></tr><tr><td>Personal backlog</td><td> backlog_definition</td><td>Visible to Groups</td><td>1</td><td><a href="backlog_definition_list.do?sysparm_query=shared_with_groupsLIKE19614d0ddb5eccd071fe86605b96194e" target="_blank" rel="noopener"><u>link</u></a></td></tr><tr><td>CAB Definition</td><td> cab_definition</td><td>Board Groups</td><td>1</td><td><a href="cab_definition_list.do?sysparm_query=board_groupsLIKE19614d0ddb5eccd071fe86605b96194e" target="_blank" rel="noopener"><u>link</u></a></td></tr><tr><td>CAB Meeting</td><td> cab_meeting</td><td>Board groups</td><td>13</td><td><a href="cab_meeting_list.do?sysparm_query=board_groupsLIKE19614d0ddb5eccd071fe86605b96194e" target="_blank" rel="noopener"><u>link</u></a></td></tr><tr><td>Business Service</td><td> cmdb_ci_service</td><td>Change Group</td><td>2</td><td><a href="cmdb_ci_service_list.do?sysparm_query=assignment_group=19614d0ddb5eccd071fe86605b96194e" target="_blank" rel="noopener"><u>link</u></a></td></tr><tr><td>Business Service</td><td> cmdb_ci_service</td><td>Support group</td><td>3</td><td><a href="cmdb_ci_service_list.do?sysparm_query=support_group=19614d0ddb5eccd071fe86605b96194e" target="_blank" rel="noopener"><u>link</u></a></td></tr><tr><td>Business Service</td><td> cmdb_ci_service</td><td>Change assignment group</td><td>3</td><td><a href="cmdb_ci_service_list.do?sysparm_query=u_change_assignment_group=19614d0ddb5eccd071fe86605b96194e" target="_blank" rel="noopener"><u>link</u></a></td></tr><tr><td>Application Service</td><td> cmdb_ci_service_auto</td><td>Change Group</td><td>2</td><td><a href="cmdb_ci_service_auto_list.do?sysparm_query=assignment_group=19614d0ddb5eccd071fe86605b96194e" target="_blank" rel="noopener"><u>link</u></a></td></tr><tr><td>Application Service</td><td> cmdb_ci_service_auto</td><td>Support group</td><td>2</td><td><a href="cmdb_ci_service_auto_list.do?sysparm_query=support_group=19614d0ddb5eccd071fe86605b96194e" target="_blank" rel="noopener"><u>link</u></a></td></tr><tr><td>Application Service</td><td> cmdb_ci_service_auto</td><td>Change assignment group</td><td>2</td><td><a href="cmdb_ci_service_auto_list.do?sysparm_query=u_change_assignment_group=19614d0ddb5eccd071fe86605b96194e" target="_blank" rel="noopener"><u>link</u></a></td></tr><tr><td>Teams</td><td> cmdb_rel_team</td><td>User group</td><td>3</td><td><a href="cmdb_rel_team_list.do?sysparm_query=user_group=19614d0ddb5eccd071fe86605b96194e" target="_blank" rel="noopener"><u>link</u></a></td></tr><tr><td>Assignment Data Lookup</td><td> dl_u_assignment</td><td>Assignment Group</td><td>1</td><td><a href="dl_u_assignment_list.do?sysparm_query=assignment_group=19614d0ddb5eccd071fe86605b96194e" target="_blank" rel="noopener"><u>link</u></a></td></tr><tr><td>Knowledge</td><td> kb_knowledge</td><td>Ownership Group</td><td>1</td><td><a href="kb_knowledge_list.do?sysparm_query=ownership_group=19614d0ddb5eccd071fe86605b96194e" target="_blank" rel="noopener"><u>link</u></a></td></tr><tr><td>Tag</td><td> label</td><td>Groups</td><td>62</td><td><a href="label_list.do?sysparm_query=group_listLIKE19614d0ddb5eccd071fe86605b96194e" target="_blank" rel="noopener"><u>link</u></a></td></tr><tr><td>Group Seeing Tag</td><td> label_group_m2m</td><td>Group</td><td>62</td><td><a href="label_group_m2m_list.do?sysparm_query=group=19614d0ddb5eccd071fe86605b96194e" target="_blank" rel="noopener"><u>link</u></a></td></tr><tr><td>User Tag</td><td> label_user_m2m</td><td>Granted by</td><td>1043</td><td><a href="label_user_m2m_list.do?sysparm_query=granted_by=19614d0ddb5eccd071fe86605b96194e" target="_blank" rel="noopener"><u>link</u></a></td></tr><tr><td>Dashboard Permissions</td><td> pa_dashboards_permissions</td><td>Group</td><td>14</td><td><a href="pa_dashboards_permissions_list.do?sysparm_query=group=19614d0ddb5eccd071fe86605b96194e" target="_blank" rel="noopener"><u>link</u></a></td></tr><tr><td>Problem</td><td> problem</td><td>Problem manager group</td><td>34</td><td><a href="problem_list.do?sysparm_query=u_problem_manager_group=19614d0ddb5eccd071fe86605b96194e" target="_blank" rel="noopener"><u>link</u></a></td></tr><tr><td>Approving Groups</td><td> sc_cat_dt_app_group</td><td>Approval group</td><td>1</td><td><a href="sc_cat_dt_app_group_list.do?sysparm_query=approval_group=19614d0ddb5eccd071fe86605b96194e" target="_blank" rel="noopener"><u>link</u></a></td></tr><tr><td>Catalog Item</td><td> sc_cat_item</td><td>Fulfillment group</td><td>4</td><td><a href="sc_cat_item_list.do?sysparm_query=group=19614d0ddb5eccd071fe86605b96194e" target="_blank" rel="noopener"><u>link</u></a></td></tr><tr><td>Catalog Item</td><td> sc_cat_item</td><td>Ownership group</td><td>21</td><td><a href="sc_cat_item_list.do?sysparm_query=u_ownership_group=19614d0ddb5eccd071fe86605b96194e" target="_blank" rel="noopener"><u>link</u></a></td></tr><tr><td>Execution Plan Task</td><td> sc_cat_item_delivery_task</td><td>Fulfillment group</td><td>4</td><td><a href="sc_cat_item_delivery_task_list.do?sysparm_query=group=19614d0ddb5eccd071fe86605b96194e" target="_blank" rel="noopener"><u>link</u></a></td></tr><tr><td>Task Definition (Requested Item)</td><td> sc_ic_req_item_task_defn</td><td>Group</td><td>4255</td><td><a href="sc_ic_req_item_task_defn_list.do?sysparm_query=assignment_group=19614d0ddb5eccd071fe86605b96194e" target="_blank" rel="noopener"><u>link</u></a></td></tr><tr><td>Task Definition</td><td> sc_ic_task_defn</td><td>Group</td><td>16</td><td><a href="sc_ic_task_defn_list.do?sysparm_query=assignment_group=19614d0ddb5eccd071fe86605b96194e" target="_blank" rel="noopener"><u>link</u></a></td></tr><tr><td>Task</td><td> sc_ic_task_defn_staging</td><td>Group</td><td>17</td><td><a href="sc_ic_task_defn_staging_list.do?sysparm_query=assignment_group=19614d0ddb5eccd071fe86605b96194e" target="_blank" rel="noopener"><u>link</u></a></td></tr><tr><td>Unallocated Group Recommendations</td><td> sn_sub_man_st_unallocated_group_recommendation</td><td>Group</td><td>1</td><td><a href="sn_sub_man_st_unallocated_group_recommendation_list.do?sysparm_query=group=19614d0ddb5eccd071fe86605b96194e" target="_blank" rel="noopener"><u>link</u></a></td></tr><tr><td>Unconfirmed user groups</td><td> sn_sub_man_st_unconfirmed_user_group</td><td>Group</td><td>1</td><td><a href="sn_sub_man_st_unconfirmed_user_group_list.do?sysparm_query=group=19614d0ddb5eccd071fe86605b96194e" target="_blank" rel="noopener"><u>link</u></a></td></tr><tr><td>Notification</td><td> sysevent_email_action</td><td>Groups</td><td>3</td><td><a href="sysevent_email_action_list.do?sysparm_query=recipient_groupsLIKE19614d0ddb5eccd071fe86605b96194e" target="_blank" rel="noopener"><u>link</u></a></td></tr><tr><td>Assignment Rule</td><td> sysrule_assignment</td><td>Group</td><td>2</td><td><a href="sysrule_assignment_list.do?sysparm_query=group=19614d0ddb5eccd071fe86605b96194e" target="_blank" rel="noopener"><u>link</u></a></td></tr><tr><td>Filter</td><td> sys_filter</td><td>Group</td><td>1</td><td><a href="sys_filter_list.do?sysparm_query=group=19614d0ddb5eccd071fe86605b96194e" target="_blank" rel="noopener"><u>link</u></a></td></tr><tr><td>Group Role</td><td> sys_group_has_role</td><td>Group</td><td>18</td><td><a href="sys_group_has_role_list.do?sysparm_query=group=19614d0ddb5eccd071fe86605b96194e" target="_blank" rel="noopener"><u>link</u></a></td></tr><tr><td>Report Users and Groups</td><td> sys_report_users_groups</td><td>Group ID</td><td>151</td><td><a href="sys_report_users_groups_list.do?sysparm_query=group_id=19614d0ddb5eccd071fe86605b96194e" target="_blank" rel="noopener"><u>link</u></a></td></tr><tr><td>Group Member</td><td> sys_user_grmember</td><td>Group</td><td>17</td><td><a href="sys_user_grmember_list.do?sysparm_query=group=19614d0ddb5eccd071fe86605b96194e" target="_blank" rel="noopener"><u>link</u></a></td></tr><tr><td>User Criteria</td><td> user_criteria</td><td>Groups</td><td>1</td><td><a href="user_criteria_list.do?sysparm_query=groupLIKE19614d0ddb5eccd071fe86605b96194e" target="_blank" rel="noopener"><u>link</u></a></td></tr><tr><td>Item Lookups</td><td> u_dl_matcher_assignment_lookup_for_item_task</td><td>Assignment group</td><td>6</td><td><a href="u_dl_matcher_assignment_lookup_for_item_task_list.do?sysparm_query=u_assignment_group=19614d0ddb5eccd071fe86605b96194e" target="_blank" rel="noopener"><u>link</u></a></td></tr><tr><td>Item Lookups</td><td> u_dl_matcher_assignment_lookup_for_item_task</td><td>Group membership</td><td>2</td><td><a href="u_dl_matcher_assignment_lookup_for_item_task_list.do?sysparm_query=u_group_membership=19614d0ddb5eccd071fe86605b96194e" target="_blank" rel="noopener"><u>link</u></a></td></tr><tr><td>Item Approval</td><td> u_item_approval</td><td>Group</td><td>1</td><td><a href="u_item_approval_list.do?sysparm_query=u_group=19614d0ddb5eccd071fe86605b96194e" target="_blank" rel="noopener"><u>link</u></a></td></tr><tr><td>Item Task</td><td> u_item_task</td><td>Group</td><td>17</td><td><a href="u_item_task_list.do?sysparm_query=u_group=19614d0ddb5eccd071fe86605b96194e" target="_blank" rel="noopener"><u>link</u></a></td></tr><tr><td>Task On-Demand SMS</td><td> u_task_notif_ondemand</td><td>Send to Groups</td><td>6</td><td><a href="u_task_notif_ondemand_list.do?sysparm_query=u_send_to_groupsLIKE19614d0ddb5eccd071fe86605b96194e" target="_blank" rel="noopener"><u>link</u></a></td></tr><tr><td>Approval Type Definition</td><td>sc_ic_aprvl_type_defn</td><td>Approver Script</td><td>44</td><td><a href="wu_location_queue_list.do?sysparm_query=approver_scriptLIKEGlobal-L2-ServiceNOW^ORapprover_scriptLIKE19614d0ddb5eccd071fe86605b96194e" target="_blank" rel="noopener"><u>link</u></a></td></tr><tr><td>Approval Type</td><td>sc_ic_aprvl_type_defn_staging</td><td>Approver script</td><td>1</td><td><a href="wu_location_queue_list.do?sysparm_query=approver_scriptLIKEGlobal-L2-ServiceNOW^ORapprover_scriptLIKE19614d0ddb5eccd071fe86605b96194e" target="_blank" rel="noopener"><u>link</u></a></td></tr><tr><td>Task Assignment Definition</td><td>sc_ic_task_assign_defn</td><td>Assignment script</td><td>64</td><td><a href="wu_location_queue_list.do?sysparm_query=assignment_scriptLIKEGlobal-L2-ServiceNOW^ORassignment_scriptLIKE19614d0ddb5eccd071fe86605b96194e" target="_blank" rel="noopener"><u>link</u></a></td></tr><tr><td>Task Assignment</td><td>sc_ic_task_assign_defn_staging</td><td>Assignment script</td><td>7</td><td><a href="wu_location_queue_list.do?sysparm_query=assignment_scriptLIKEGlobal-L2-ServiceNOW^ORassignment_scriptLIKE19614d0ddb5eccd071fe86605b96194e" target="_blank" rel="noopener"><u>link</u></a></td></tr><tr><td>Scheduled Script Execution</td><td>sysauto_script</td><td>Run this script</td><td>1</td><td><a href="wu_location_queue_list.do?sysparm_query=scriptLIKEGlobal-L2-ServiceNOW^ORscriptLIKE19614d0ddb5eccd071fe86605b96194e" target="_blank" rel="noopener"><u>link</u></a></td></tr><tr><td>Business Rule</td><td>sys_script</td><td>Script</td><td>1</td><td><a href="wu_location_queue_list.do?sysparm_query=scriptLIKEGlobal-L2-ServiceNOW^ORscriptLIKE19614d0ddb5eccd071fe86605b96194e" target="_blank" rel="noopener"><u>link</u></a></td></tr><tr><td>Fix Script</td><td>sys_script_fix</td><td>Script</td><td>1</td><td><a href="wu_location_queue_list.do?sysparm_query=scriptLIKEGlobal-L2-ServiceNOW^ORscriptLIKE19614d0ddb5eccd071fe86605b96194e" target="_blank" rel="noopener"><u>link</u></a></td></tr><tr><td>Script Include</td><td>sys_script_include</td><td>Script</td><td>3</td><td><a href="wu_location_queue_list.do?sysparm_query=scriptLIKEGlobal-L2-ServiceNOW^ORscriptLIKE19614d0ddb5eccd071fe86605b96194e" target="_blank" rel="noopener"><u>link</u></a></td></tr><tr><td>Access Control</td><td>sys_security_acl</td><td>Script</td><td>6</td><td><a href="wu_location_queue_list.do?sysparm_query=scriptLIKEGlobal-L2-ServiceNOW^ORscriptLIKE19614d0ddb5eccd071fe86605b96194e" target="_blank" rel="noopener"><u>link</u></a></td></tr><tr><td>Item Approval</td><td>u_item_approval</td><td>Script</td><td>788</td><td><a href="wu_location_queue_list.do?sysparm_query=u_scriptLIKEGlobal-L2-ServiceNOW^ORu_scriptLIKE19614d0ddb5eccd071fe86605b96194e" target="_blank" rel="noopener"><u>link</u></a></td></tr><tr><td>Item Task</td><td>u_item_task</td><td>Script</td><td>1</td><td><a href="wu_location_queue_list.do?sysparm_query=u_scriptLIKEGlobal-L2-ServiceNOW^ORu_scriptLIKE19614d0ddb5eccd071fe86605b96194e" target="_blank" rel="noopener"><u>link</u></a></td></tr></tbody></table></div>
                 </div>
-            </div>
-            <div class="container">
-                <h3>Referenced Data</h3>
-                <div id="data"></div>
-            </div>
-        </div>
-
-        <!-- Container row 2 -->
-        <div class="container-row">
-            <div class="container">
-                <h3>Scripts calling the object by name </h3>
-                <div id="scripts-name"></div>
+            </div> 
+            <div class="container2">
+                <div class="container">
+                    <h3>Referenced Data</h3>
+                    <div class="container-content" id="data"><table class="styled-table" border="1"><tbody><tr><th> Table referencing the Group</th><th> Technical name </th><th> Column </th><th> Number of records referencing the Group </th><th> link to records</th></tr><tr><td>Base Configuration Item</td><td>cmdb</td><td>Change Group</td><td>2</td><td><a href="cmdb_list.do?sysparm_query=assignment_group=19614d0ddb5eccd071fe86605b96194e" target="_blank" rel="noopener"><u>link</u></a></td></tr><tr><td>Base Configuration Item</td><td>cmdb</td><td>Support group</td><td>3</td><td><a href="cmdb_list.do?sysparm_query=support_group=19614d0ddb5eccd071fe86605b96194e" target="_blank" rel="noopener"><u>link</u></a></td></tr><tr><td>Configuration Item</td><td>cmdb_ci</td><td>Change Group</td><td>2</td><td><a href="cmdb_ci_list.do?sysparm_query=assignment_group=19614d0ddb5eccd071fe86605b96194e" target="_blank" rel="noopener"><u>link</u></a></td></tr><tr><td>Configuration Item</td><td>cmdb_ci</td><td>Support group</td><td>3</td><td><a href="cmdb_ci_list.do?sysparm_query=support_group=19614d0ddb5eccd071fe86605b96194e" target="_blank" rel="noopener"><u>link</u></a></td></tr><tr><td>Task</td><td>task</td><td>Assignment group</td><td>7432</td><td><a href="task_list.do?sysparm_query=assignment_group=19614d0ddb5eccd071fe86605b96194e" target="_blank" rel="noopener"><u>link</u></a></td></tr></tbody></table></div>                </div>
+                <div class="container">
+                    <h3>Scripts calling the object by name </h3>
+<div class="container-content" id="scripts-name"><table class="styled-table" border="1"><tbody><tr><th> Table referencing the Group</th><th> Technical name </th><th> Column </th><th> Number of records referencing the Group </th><th> link to records</th></tr><tr><td>Approval Type Definition</td><td>sc_ic_aprvl_type_defn</td><td>Approver Script</td><td>44</td><td><a href="sc_ic_aprvl_type_defn_list.do?sysparm_query=approver_scriptLIKEGlobal-L2-ServiceNOW" target="_blank" rel="noopener"><u>link</u></a></td></tr><tr><td>Approval Type</td><td>sc_ic_aprvl_type_defn_staging</td><td>Approver script</td><td>1</td><td><a href="sc_ic_aprvl_type_defn_staging_list.do?sysparm_query=approver_scriptLIKEGlobal-L2-ServiceNOW" target="_blank" rel="noopener"><u>link</u></a></td></tr><tr><td>Task Assignment Definition</td><td>sc_ic_task_assign_defn</td><td>Assignment script</td><td>64</td><td><a href="sc_ic_task_assign_defn_list.do?sysparm_query=assignment_scriptLIKEGlobal-L2-ServiceNOW" target="_blank" rel="noopener"><u>link</u></a></td></tr><tr><td>Task Assignment</td><td>sc_ic_task_assign_defn_staging</td><td>Assignment script</td><td>7</td><td><a href="sc_ic_task_assign_defn_staging_list.do?sysparm_query=assignment_scriptLIKEGlobal-L2-ServiceNOW" target="_blank" rel="noopener"><u>link</u></a></td></tr><tr><td>Scheduled Script Execution</td><td>sysauto_script</td><td>Run this script</td><td>1</td><td><a href="sysauto_script_list.do?sysparm_query=scriptLIKEGlobal-L2-ServiceNOW" target="_blank" rel="noopener"><u>link</u></a></td></tr><tr><td>Script Include</td><td>sys_script_include</td><td>Script</td><td>2</td><td><a href="sys_script_include_list.do?sysparm_query=scriptLIKEGlobal-L2-ServiceNOW" target="_blank" rel="noopener"><u>link</u></a></td></tr><tr><td>Access Control</td><td>sys_security_acl</td><td>Script</td><td>6</td><td><a href="sys_security_acl_list.do?sysparm_query=scriptLIKEGlobal-L2-ServiceNOW" target="_blank" rel="noopener"><u>link</u></a></td></tr><tr><td>Item Approval</td><td>u_item_approval</td><td>Script</td><td>788</td><td><a href="u_item_approval_list.do?sysparm_query=u_scriptLIKEGlobal-L2-ServiceNOW" target="_blank" rel="noopener"><u>link</u></a></td></tr><tr><td>Item Task</td><td>u_item_task</td><td>Script</td><td>1</td><td><a href="u_item_task_list.do?sysparm_query=u_scriptLIKEGlobal-L2-ServiceNOW" target="_blank" rel="noopener"><u>link</u></a></td></tr></tbody></table></div>                </div>
             </div>
         </div>
-    </div>
-
+    </div>   
 </body>
 
 </j:jelly>
